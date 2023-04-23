@@ -1,0 +1,7 @@
+Pandas == 2.0.0
+numpy == 1.24
+seaborn == 0.11.2
+Matplotlib == 3.5.2
+folium == 0.14.0
+category_encoders == 2.6.0
+scikit-learn == 1.0.2
