@@ -252,12 +252,7 @@ elif page == pages[3]:
     
     # Conséquences 
     st.header("Quelques conséquences liées au réchauffement climatique")
-    st.markdown("Dans le cadre de l’étude de notre problématique, nous avons poursuivi nos analyses en observant certains effets du réchauffement climatique : \n- L’augmentation du nombre de catastrophes naturelles, \n- La montée du niveau de la mer.")
-    
-    # Catastrophes naturelles
-    st.header("Augmentation du nombre de catastrophes naturelles")
-    
-    st.markdown("A COMPLETER")
+    st.markdown("Dans le cadre de l’étude de notre problématique, nous avons poursuivi nos analyses en observant certains effets du réchauffement climatique : \n- La montée du niveau de la mer, \n- L’augmentation du nombre de catastrophes naturelles.")
     
     # Hausse du niveau de la mer
     
@@ -346,7 +341,7 @@ elif page == pages[3]:
     
     st.subheader("Régression linéaire")
     
-    st.markdown("Enfin, pour visualiser cette relation, nous avons réalisé un graphique en nuage de points, puis une modélisation linéaire")
+    st.markdown("Enfin, pour visualiser cette relation, nous avons réalisé un graphique en nuage de points, puis une modélisation linéaire.")
     
     from scipy import stats
 
@@ -374,6 +369,72 @@ elif page == pages[3]:
 
     st.markdown("Ce graphique confirme de nouveau la relation étroite entre la hausse des températures et l’augmentation du niveau de la mer.")
 
+    
+    
+    # Catastrophes naturelles
+    st.header("Augmentation du nombre de catastrophes naturelles")
+    
+    st.markdown('Les catastrophes naturelles étudiées à travers notre projet sont : les inondations, les tempêtes (typhons, moussons, etc.), les glissements de terrain, les sécheresses et les températures extrêmes.')
+    
+    # Graphique
+    df_cn = pd.read_csv('./documents/formation/projet/streamlit/df_cn.csv')
+    
+    fig = plt.figure(figsize=(10,7))
+    ax = fig.add_subplot(111)
+
+    df_cn.groupby(['year']).count().plot(kind="bar", ax=ax)
+
+    plt.xlabel('Année')
+    plt.ylabel('Nombre de catastrophes naturelles')
+
+    plt.title("Nombre de catastrophes naturelles par année de 1960 à 2018")
+
+    ax.get_legend().remove()
+    
+    st.pyplot(fig)
+    
+    st.markdown('Le nombre de catastrophes naturelles augmente au fil des années, avec une accélération à partir des années 2000. On peut donc supposer un lien entre la hausse des températures et le nombre d\'évènements climatiques graves.')
+    
+    st.header('Corrélations avec l’évolution des températures')
+    
+    
+    # Régression
+    
+    st.subheader("Régression linéaire")
+    
+    st.markdown("Pour visualiser la relation entre l'évolution des températures et le nombre de catastrophes naturelles, nous avons réalisé un graphique en nuage de points, puis une modélisation linéaire.")
+    
+    from scipy import stats
+
+    df_cor_cn = pd.read_csv('./documents/formation/projet/streamlit/df_cor_cn.csv')
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+ 
+    X = df_cor_cn['nb_cn']
+    Y = df_cor_cn['Glob']
+
+    slope, intercept, r_value, p_value, std_err = stats.linregress(X, Y)
+
+    plt.plot(X, Y, 'o', label='données')
+    plt.plot(X, intercept + slope*X, 'r', label='régression')
+
+    plt.xlabel("Niveau de la mer") 
+    plt.ylabel("Température globale") 
+
+    r2 = f'{r_value**2:.4f}'
+    ax.text(250, -0.17, r"$ r^2 $ = " + r2, fontsize=12)
+    
+    st.pyplot(fig)
+
+
+    st.markdown("Ce graphique confirme la relation étroite entre la hausse des températures et l’augmentation du nombre de catastrophes naturelles dans le monde.")
+
+
+    
+    
+    
+    
 
 
 
