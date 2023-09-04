@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from PIL import Image
-
+import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -14,7 +14,7 @@ st.sidebar.image('./documents/formation/projet/streamlit/gl_wrmg_sidebar.png', u
 
 # Création des pages
 st.sidebar.subheader('Menu')
-pages = ['Introduction', 'Observations', 'Causes', 'Conséquences', 'Zoom sur l\'Europe', 'Conclusion']
+pages = ['Données', 'Observations', 'Causes', 'Conséquences', 'Zoom sur l\'Europe', 'Conclusion']
 page = st.sidebar.radio('', pages)
 
 st.sidebar.markdown("--") 
@@ -26,31 +26,168 @@ st.sidebar.markdown("--")
 st.sidebar.subheader('Membres du projet : \n- Jason Fraissinet \n- Mohamed Gloulou \n- Marie Letoret')
 
 if page == pages[0]:
-    image = Image.open('./documents/formation/projet/streamlit/img_header.jpg')
-    st.image(image)
+    st.image('./documents/formation/projet/streamlit/img_agri.jpg')
+    st.title('Analyses et Objectifs')
+    st.markdown("Ce projet vise à analyser les tendances de réchauffement climatique mondial et leurs impacts sur l'agriculture. Il utilise des données climatiques à long terme pour mieux comprendre les facteurs du changement climatique. L'objectif est d'améliorer les pratiques agricoles, réduire les coûts, augmenter les rendements, et favoriser la résilience des cultures face aux changements climatiques. Cela peut également contribuer à l'innovation agricole, à la sensibilisation et à la prise de décisions éclairées, nécessitant une collaboration multidisciplinaire.")    
+    st.markdown("L'objectif principal de notre projet consiste à observer l’évolution de la température au cours des 150 dernières années, à effectuer une analyse au niveau mondial et par zone géographique. Ensuite, une analyse de certains facteurs influençant le réchauffement climatique sera également effectuée. Enfin, le rapport regroupera également quelques études illustrant les conséquences du réchauffement climatique (évènements météorologiques, montée du niveau de la mer), puis présentera plusieurs analyses à l’échelle européenne.")
     
-    st.dataframe(df.head())
+    st.title('Données utilisées')
+    st.markdown("La principale source de données utilisée pour nos analyses est celle de la [NASA](https://data.giss.nasa.gov/gistemp/ ). On a aussi utilisés d'autres données tel que [GIEC](https://www.ipcc.ch/report/ar6/syr/) (Groupe d'experts intergouvernemental sur l'évolution du climat) et [COPERNICUS](https://climate.copernicus.eu/climate-indicators/sea-surface-temperature). Toutes nos données sont publiquement téléchargeables.")
+    st.header('Les données par pays')
+    st.markdown("La première base de données utilisée contient des éléments recueillis par la NASA relatifs à la température globale de la terre depuis 1880. Afin de conduire une analyse globale, plusieurs jeux de données complémentaires ont été agrégés. Ils sont issus d’agences gouvernementales européennes, américaines et australiennes.")
+    
+    df_localisation = pd.read_csv('./documents/formation/projet/GPD_observation/localisation.csv')
+    df_localisation['year'] = df_localisation['year'].astype(str)
+    df_localisation['year'] = df_localisation['year'].str.replace(',', '')
+    st.write(df_localisation)
+    st.markdown(" Pour chaque pays, on retrouve son nom raccourci, son continent, sa région du monde, sa latitude. Ces premières colonnes sont utiles soit pour retrouver un pays en particulier, soit pour grouper les pays par régions du monde selon les analyses que l’on souhaite réaliser.")
+    st.markdown("On a ensuite la colonne geometry, qui nous permet de placer le pays sur une carte grâce à GeoPandas.")
+    st.markdown(" Puis on a toutes les colonnes avec les données que l’on utilisera pour les différentes analyses.")
+
+    
+    st.header('Les données par latitudes')
+    st.markdown("Cette seconde base de données est composé de plusieurs colonnes, chacune d'entre elles renfermant des informations cruciales pour évaluer les changements climatiques à l'échelle globale et régionale. Il y a des éléments recueillis par la NASA, par GIEC (Groupe d'experts intergouvernemental sur l'évolution du climat) et  par Copernicus.")
+    df_fusion= pd.read_csv('./documents/formation/projet/streamlit/donnees_fusionnees.csv')
+    df_fusion['Year'] = df_fusion['Year'].astype(str)
+    df_fusion['Year'] = df_fusion['Year'].str.replace(',', '')
+
+    st.write(df_fusion)
+    st.markdown("La colonne Year (Année) est notre axe temporel, nous permettant de suivre l'évolution climatique sur une période spécifique. Les autres colonnes telles que Glob, NHem, et SHem représentent respectivement les températures globales, l'hémisphère nord, et l'hémisphère sud.")
+    st.markdown("Des subdivisions géographiques telles que 24N-90N, 24S-24N, et 90S-24S nous permettent de comprendre les différences régionales dans les changements climatiques, mettant en lumière les disparités climatiques entre les différentes zones de la planète.")
+    st.markdown("Les colonnes CH[4] (méthane), CO[2] (dioxyde de carbone), et N[2]*O (protoxyde d'azote) présentent les concentrations de gaz à effet de serre, offrant un aperçu de l'impact des émissions humaines sur l'atmosphère.")
+    st.markdown("Les données relatives au niveau de la mer, comme CSIRO Adjusted Sea Level et les bornes d'erreur associées, sont cruciales pour évaluer les effets du réchauffement climatique sur la montée du niveau de la mer et ses conséquences potentielles.")
+
+    st.header("Pré-processing et feature engineering")
+    st.markdown("La base de données issue de la NASA est propre. Elle ne contient pas de valeurs NaN. Aucun nettoyage ou traitement n’a été utile.")
+    st.markdown("De même, nous n’avons pas procédé à des transformations de données (de type normalisation/standardisation). Et nous n’avons pas effectué de techniques de réduction de dimension dans la partie de modélisation.")
+
+    
+    
+    
     
 elif page == pages[1]:
     
-    # Evolution de la température
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+
+    st.title("Analyse des données climatiques")
+    st.header("A l'échelle mondiale")
+    st.markdown("D'après les observations réalisées à l’échelle spatiale et temporelle, le réchauffement de la température moyenne mondiale de l’air est largement constaté.")
     
-    t = ax.set_title("Evolution des températures dans le monde de 1880 à 2022")
-    text = [ax.text(1990, -0.1 ,'Température moyenne', fontsize=8), ax.text(1997,-0.17 ,'1951 - 1980', fontsize=8)] 
+
+
+# Charger votre DataFrame df avec les données
+
+# Widget pour choisir le type de graphique
+    graph_type = st.selectbox("Sélectionnez le type de graphique :", ["Évolution de la température globale", "Comparaison de trois zones"])
+
+    if graph_type == "Évolution de la température globale":
+    # Évolution de la température globale
+        fig, ax = plt.subplots()  # Créez une figure et un axe Matplotlib
+        t = ax.set_title("Evolution des températures dans le monde de 1880 à 2022")
+        text = [ax.text(1990, -0.1 ,'Température moyenne', fontsize=8), ax.text(1997,-0.17 ,'1951 - 1980', fontsize=8)] 
    
-    ax = sns.lineplot(x='Year', y='Glob', data=df)
-    ax = sns.lineplot(x='Year', y= 0, data = df, linestyle='dotted', color = 'black')
-    ax.set(xlabel='Année', ylabel='Température globale') 
+        ax = sns.lineplot(x='Year', y='Glob', data=df)
+        ax = sns.lineplot(x='Year', y= 0, data = df, linestyle='dotted', color = 'black')
+        ax.set(xlabel='Année', ylabel='Température globale') 
     
-    st.pyplot(fig)
+        st.pyplot(fig)
     
+    else:
     # Comparaison sur trois zones
-    df.plot(x = 'Year', y = ['24N-90N', '24S-24N', '90S-24S'], 
-            style = ["b-", "g-", "m-"], 
-            title = "Réchauffement climatique - Comparaison sur trois zones", 
-            figsize=(12,4), linewidth = 0.8);
+        fig, ax = plt.subplots()  # Créez une nouvelle figure et un axe Matplotlib
+        df.plot(x = 'Year', y = ['Glob','NHem', 'SHem'], 
+                style = ["b-", "g-", "m-"], 
+                title = "Réchauffement climatique - Comparaison sur trois zones", 
+                figsize=(12,4), linewidth = 0.8, ax=ax)  # Utilisez l'axe créé
+    
+        st.pyplot(fig)
+    
+
+    st.markdown("A la suite d’une analyse rapide du jeu de données provenant de la NASA, nous observons ci-dessus une augmentation de la température depuis le début du XXème siècle et une accélération de celle-ci qui est particulièrement marquée à partir des années 1980.")
+    st.markdown("De plus, nous pouvons constater que depuis la fin du XIXe siècle, la température moyenne mondiale a augmenté d’environ 1,1 °C.")
+    st.markdown("Nous pouvons également observer une augmentation des températures à un rythme différent en fonction de la latitude (graphe ci-dessous).")
+
+# Création de la colormap personnalisée avec des couleurs allant du bleu foncé au rouge
+    colors = ["navy", "blue", "dodgerblue", "skyblue", "lightsteelblue", "lightsalmon", "salmon", "orangered"]
+    cmap = mcolors.LinearSegmentedColormap.from_list("custom", colors)
+
+# Sélection des colonnes pour chaque zone géographique
+    cols = ['64N-90N', '44N-64N', '24N-44N', 'EQU-24N', '24S-EQU', '44S-24S', '64S-44S', '90S-64S']
+    df_zones = df[cols]
+
+# Création du graphique en aires empilées avec la colormap personnalisée
+    fig, ax = plt.subplots()
+    ax.stackplot(df['Year'], df_zones.T, labels=df_zones.columns, colors=cmap(np.linspace(0, 1, len(cols))))
+
+# Paramètres du graphique
+    plt.title("Contribution de chaque zone géographique à la température globale")
+    plt.xlabel("Année")
+    plt.ylabel("Température (°C)")
+    plt.legend(loc='upper left')
+
+# Afficher le graphique dans Streamlit
+    st.pyplot(fig)
+  
+    st.markdown("L'hémisphère Nord du globe subit une augmentation de température de façon plus importante que l’hémisphère Sud. Le pôle Nord en particulier est la zone du monde la plus fortement impactée. ")
+    st.markdown("En calculant l’écart de la température de la moyenne des 10 dernières années par rapport à la moyenne de la période 1951 - 1980, nous avons obtenu la carte de chaleur ci-dessous, qui confirme que la partie Nord du globe est la zone la plus touchée par ces augmentations.")
+
+    moy_10_64N_90N = df.loc[df['Year'] > 2012, '64N-90N'].mean()
+    moy_10_44N_64N = df.loc[df['Year'] > 2012, '44N-64N'].mean()
+    moy_10_24N_44N = df.loc[df['Year'] > 2012, '24N-44N'].mean()
+    moy_10_EQU_24N = df.loc[df['Year'] > 2012, 'EQU-24N'].mean()
+    moy_10_24S_EQU = df.loc[df['Year'] > 2012, '24S-EQU'].mean()
+    moy_10_44S_24S = df.loc[df['Year'] > 2012, '44S-24S'].mean()
+    moy_10_64S_44S = df.loc[df['Year'] > 2012, '64S-44S'].mean()
+    moy_10_90S_64S = df.loc[df['Year'] > 2012, '90S-64S'].mean()
+
+# Moyennes
+    moyenne = np.array([[moy_10_64N_90N], [moy_10_44N_64N], [moy_10_24N_44N], [moy_10_EQU_24N],
+                    [moy_10_24S_EQU], [moy_10_44S_24S], [moy_10_64S_44S], [moy_10_90S_64S]])
+
+# Créer une figure
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+# Charger l'image de la carte du monde
+    import matplotlib.image as mpimg
+    map_img = mpimg.imread('./documents/formation/projet/carte_monde_2.png')
+
+# Étiquettes pour les valeurs de la heatmap
+    labels = (np.asarray(["+ {0:.2f} °C".format(value)
+                          for value in moyenne.flatten()])).reshape(8, 1)
+
+# Créer la heatmap
+    htmp = sns.heatmap(moyenne, fmt="", alpha=0.7, zorder=2, cmap='YlOrRd', ax=ax, cbar=False)
+
+# Ajouter les étiquettes
+    for y in range(labels.shape[0]):
+        for x in range(labels.shape[1]):
+            ax.text(x + 0.02, y + 0.6, labels[y, x], color='black', weight='bold', fontsize=9)
+
+# Superposer l'image de la carte du monde
+    htmp.imshow(map_img,
+                aspect=htmp.get_aspect(),
+                extent=htmp.get_xlim() + htmp.get_ylim(),
+                zorder=1)
+
+# Masquer les axes
+    plt.axis('off')
+
+# Afficher le graphique dans Streamlit
+    st.pyplot(fig)
+
+    st.header("Analyse avec GeoPandas")
+    st.markdown("L’utilisation de GeoPandas nous a permis de visualiser et de constater le réchauffement climatique par zones géographiques.")
+    st.markdown("A l’échelle mondiale, nous pouvons ainsi noter l’augmentation des températures selon les continents et les pays. L’arctique est la zone aujourd’hui connaissant la plus forte augmentation. ")
+    st.markdown("Grâce aux cartes ci-dessous, on se rend compte de l’augmentation des températures année par année, et surtout d’une inversion.")
+    st.markdown("En faisant attention à l’échelle, les différences de températures sont très souvent entre 0 et 1 pour les cartes de 1880, 1940 et 2000. En revanche, avec la carte de 2020 on se rend très vite compte de l’augmentation de la vitesse du réchauffement climatique.")
+
+
+
+
+
+
+
+
+
 
 elif page == pages[2]:
     
@@ -430,7 +567,7 @@ elif page == pages[3]:
 
     st.markdown("Ce graphique confirme la relation étroite entre la hausse des températures et l’augmentation du nombre de catastrophes naturelles dans le monde.")
 
-    elif page == pages[4]:  
+elif page == pages[4]:  
     
     # Intro 
     st.header("Zoom sur une région du monde : l'Europe")
