@@ -32,7 +32,7 @@ if page == pages[0]:
     st.markdown("L'objectif principal de notre projet consiste à observer l’évolution de la température au cours des 150 dernières années, à effectuer une analyse au niveau mondial et par zone géographique. Ensuite, une analyse de certains facteurs influençant le réchauffement climatique sera également effectuée. Enfin, le rapport regroupera également quelques études illustrant les conséquences du réchauffement climatique (évènements météorologiques, montée du niveau de la mer), puis présentera plusieurs analyses à l’échelle européenne.")
     
     st.title('Données utilisées')
-    st.markdown("La principale source de données utilisée pour nos analyses est celle de la [NASA](https://data.giss.nasa.gov/gistemp/ ). On a aussi utilisés d'autres données tel que [GIEC](https://www.ipcc.ch/report/ar6/syr/) (Groupe d'experts intergouvernemental sur l'évolution du climat) et [COPERNICUS](https://climate.copernicus.eu/climate-indicators/sea-surface-temperature). Toutes nos données sont publiquement téléchargeables.")
+    st.markdown("La principale source de données utilisée pour nos analyses est celle de la [NASA](https://data.giss.nasa.gov/gistemp/ ). On a aussi utilisé d'autres données tel que [GIEC](https://www.ipcc.ch/report/ar6/syr/) (Groupe d'experts intergouvernemental sur l'évolution du climat) et [COPERNICUS](https://climate.copernicus.eu/climate-indicators/sea-surface-temperature). Toutes nos données sont publiquement téléchargeables.")
     st.header('Les données par pays')
     st.markdown("La première base de données utilisée contient des éléments recueillis par la NASA relatifs à la température globale de la terre depuis 1880. Afin de conduire une analyse globale, plusieurs jeux de données complémentaires ont été agrégés. Ils sont issus d’agences gouvernementales européennes, américaines et australiennes.")
     
@@ -442,7 +442,7 @@ elif page == pages[3]:
     sns.heatmap(cor, annot=True, ax=ax, cmap='coolwarm')
     st.pyplot(fig)
     
-    st.markdown("Nous pouvons ainsi noter : \n- une très forte corrélation entre le niveau de la mer (données issues de trois sources différentes) et les années. \n- une forte corrélation entre le niveau de la mer et les températures globales.")
+    st.markdown("Nous pouvons ainsi noter : \n- une **très forte** corrélation entre le niveau de la mer (données issues de trois sources différentes) et les années. \n- une **forte** corrélation entre le niveau de la mer et les températures globales.")
     
     # Relation entre les températures et le niveau de la mer
     st.markdown("En complément, l’observation en parallèle de l’évolution des températures avec celui du niveau de la mer permet de vérifier graphiquement la corrélation entre ces deux variables.")
@@ -580,13 +580,13 @@ elif page == pages[4]:
 
     col1,col2,col3 = st.columns([1,1,1])
     with col1:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\Temp_1900.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/Temp_1900.png")
         st.image(image,width=250)
     with col2:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\Temp_1960.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/Temp_1960.png")
         st.image(image,width=250)
     with col3:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\Temp_2020.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/Temp_2020.png")
         st.image(image,width=250)
 
     st.markdown("Dans un premier temps, on regarde les différences de températures. Etant donné que les valeurs des différences de températures sont indexées selon les latitudes des pays, on obtient trois couleurs distinctes. Comme analysé précédemment, l’augmentation des températures est plus importante en se rapprochant du pôle Nord. Comme attendu, les différences de températures sont de plus en plus importantes.")
@@ -594,13 +594,13 @@ elif page == pages[4]:
     
     st.header("Evolution du nombre de catastrophe naturelle")
 
-    st.markdown("Les hausses de températures ont un impact sur le nombre de catastrophes naturelles, comme les tornades, secheresse, innondations, ect.. A l'aide d'un jeu de données fourni par la NASA, on observe l'évolution du nombre de catastrophes naturelles en Europe. ")
+    st.markdown("Les hausses de températures ont un impact sur le nombre de catastrophes naturelles, comme les tornades, sécheresse, inondations, etc.. A l'aide d'un jeu de données fourni par la NASA, on observe l'évolution du nombre de catastrophes naturelles en Europe. ")
     col1,col2 = st.columns([1,1])
     with col1:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\cata_199x.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/cata_199x.png")
         st.image(image,width=250)
     with col2:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\cata_201x.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/cata_201x.png")
         st.image(image,width=250)
 
     st.markdown("Les cartes ont été tracées sur une décennie de catastrophes naturelles, en ne prenant en compte que les sécheresses, tempêtes et inondations sévères. Les tremblements de terres et éruptions volcaniqueont par exemple été filtrés car ces évènements ne sont, de notre point de vue, pas liés au réchauffement climatique.") 
@@ -613,16 +613,16 @@ elif page == pages[4]:
     st.markdown("Pour tracer ces cartes, le jeu de données utilisé précédemment pour l’analyse a été de nouveau exploité.")
     col1,col2,col3 = st.columns([1,1,1])
     with col1:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\CO2_1880.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/CO2_1880.png")
         st.image(image,width=230)
     with col2:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\CO2_1940.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/CO2_1940.png")
         st.image(image,width=230)
     with col3:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\CO2_2020.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/CO2_2020.png")
         st.image(image,width=230)
 
-    st.markdown("On voit sur ces trois cartes l’augmentation très nette des émissions de CO2 au fil des ans. C’est une observation cohérente au vu des analyses précédentes, où les émissions de CO2 étaient fortement corrélées à l’augmentation des températures globales")
+    st.markdown("On voit sur ces trois cartes l’augmentation très nette des émissions de CO2 au fil des ans. C’est une observation cohérente au vu des analyses précédentes, où les émissions de CO2 étaient fortement corrélées à l’augmentation des températures globales.")
      # Croissance industrielle
     
     st.header("Croissance industrielle")
@@ -630,10 +630,10 @@ elif page == pages[4]:
     st.markdown("Pour tracer les deux cartes ci-dessous, on a utilisé la croissance de l’index de production industrielle.")
     col1,col2 = st.columns([1,1])
     with col1:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\Indus_1990.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/Indus_1990.png")
         st.image(image,width=250)
     with col2:
-        image = Image.open(r"C:\Users\jason\Pictures\Projet data\Indus_2020.png")
+        image = Image.open(r"./documents/formation/projet/streamlit/Indus_2020.png")
         st.image(image,width=250)
     
     st.markdown("Ici, on remarque qu’entre 1990 et 2020 l’Europe est plus sur une phase de décroissance industrielle. Même si l’industrie a pu jouer un rôle important sur la pollution de l’air et l’augmentation des températures, son influence est aujourd’hui moindre en Europe.")
@@ -646,13 +646,13 @@ elif page == pages[5]:
     st.markdown("Nos analyses conduisent à une constatation d’un réchauffement climatique à travers le dernier siècle, et à une accélération de celui-ci au cours des quarante dernières années. La décennie 2011-2020 a été la plus chaude jamais enregistrée. ")
     st.markdown("Les émissions de gaz à effet de serre, et notamment celles du dioxyde de carbone, dues aux activités humaines ont réchauffé la planète à un rythme sans précédent.")
     st.markdown("Cela a de nombreuses conséquences (vagues de chaleur, précipitations extrêmes, sécheresses, fonte des glaciers, etc.) et conduit à une vulnérabilité des écosystèmes et de la population (accès à l’eau et à l'alimentation, santé, etc.).")
-    st.header("Conséquence sur l'agriculture")
+    st.header("Conséquences sur l'agriculture")
     st.markdown("Cela a également des conséquences significatives dans le domaine de l'agriculture. Les cycles saisonniers sont perturbés par des températures changeantes et des schémas météorologiques imprévisibles, entraînant une diminution des rendements des cultures. Les sécheresses plus fréquentes et intenses augmentent le stress hydrique, tandis que les températures plus élevées favorisent les ravageurs et les maladies agricoles. Les cultures sensibles à la chaleur, comme le blé, le maïs et le riz, voient leurs rendements réduits. Le déplacement géographique des cultures devient nécessaire. Les fluctuations des rendements entraînent une instabilité économique et des prix alimentaires variables. Pour relever ces défis, des pratiques agricoles durables et des politiques d'adaptation au climat sont essentielles.")
-    st.markdown("On aura souhaité approfondir ce lien entre le réchauffement climatique et l'agriculture. Cependant, cela demandait beaucoup d'analayse suplémentaires afin de relier les deux, comme les précipitations, les jours d'ensoleillement, ect.. ")
+    st.markdown("On aurait souhaité approfondir ce lien entre le réchauffement climatique et l'agriculture. Cependant, cela demandait beaucoup d'analyses supplémentaires afin de relier les deux, comme les précipitations, les jours d'ensoleillement, etc.. ")
     st.markdown("On pense néanmoins qu'une approche basée sur l'analyse de base de données pourrait être bénéfique pour determiner les cultures optimales selon les régions du monde.")
     st.markdown("")
     st.markdown("")
-    image = Image.open(r"C:\Users\jason\Pictures\Projet data\rechauffement.jpg")
+    image = Image.open(r"./documents/formation/projet/streamlit/rechauffement.jpg")
     st.image(image,width=600)
     st.caption(body = "crédit : Journal Contrepoints")
     
